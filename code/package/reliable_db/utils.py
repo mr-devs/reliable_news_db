@@ -2,6 +2,42 @@
 Utility functions for the reliable news database are saved here.
 """
 import inspect
+import os
+import random
+import time
+
+
+def random_wait(min=1, max=5):
+    """
+    Sleeps for a random amount of time between min+1 and max+1 seconds.
+    """
+    if not all(isinstance(item, int) for item in (min, max)):
+        raise ValueError("min and max must be integers.")
+
+    wait_time = 1 + random.uniform(min, max)
+    print(f"\t- Sleeping for {wait_time:.2f} seconds.")
+    time.sleep(wait_time)
+
+
+def collect_last_x_files(path, num_files):
+    """
+    Collect the full paths to the most recent `num_files` files in `path`.
+    Files in `path` are assumed to be prefixed with a date in the format YYYY_MM_DD.
+
+    Parameters
+    ----------
+    - path (str): the path to the directory containing the files
+    - num_files (int): the number of files to collect
+
+    Returns
+    -------
+    list: a list of full paths to the most recent `num_files` files in `path`
+    """
+    # Sorted in ascending order, meaning recent dates are last
+    files = sorted(os.listdir(path))
+    if num_files > len(files):
+        return [os.path.join(path, file) for file in files]
+    return [os.path.join(path, file) for file in files[-num_files:]]
 
 
 def get_class_property_dict(obj):
