@@ -1,7 +1,6 @@
 """
 Data models for processing responses from models.
 """
-from datetime import datetime
 from reliable_db.utils import get_dict_val
 
 
