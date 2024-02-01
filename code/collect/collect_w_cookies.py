@@ -3,6 +3,10 @@ Purpose:
     Fetch and processes news articles from various domains using SERP API
     and newspaper3k.
 
+NOTE: DO NOT USE THIS SCRIPT. THIS SCRIPT IS BEING STORED AS A BACKUP OF FUNCTIONALITY
+    THAT USES COOKIES, MANUAL REQUESTS, AND OTHER APPROACHES TO GET AROUND TRICKY DOMAINS.
+    WE MAY NEED IT DOWN THE LINE BUT DO NOT AT THIS POINT IN TIME.
+
 Inputs:
     No script inputs.
     A dataframe with domains and associated Google News publication tokens is
@@ -37,29 +41,33 @@ import datetime
 import json
 import os
 import random
+import requests
 import time
+import tldextract
 
 import pandas as pd
 
-# from fake_useragent import UserAgent
+from fake_useragent import UserAgent
 from serpapi import GoogleSearch
-
-# from newspaper import Config
+from newspaper import Config
 from newspaper import Article
 
-# from reliable_db.cookies import COOKIES_MAP
+from reliable_db.cookies import COOKIES_MAP
 from reliable_db.serp_models import SerpGnewsArticle
-from reliable_db.utils import get_class_property_dict, get_dict_val
+from reliable_db.utils import get_class_property_dict
 
 # Make sure we are in the proper directory for the relative output dirs/files
 CURR_DIR = os.path.dirname(os.path.abspath(__file__))
 if os.getcwd() != CURR_DIR:
     os.chdir(CURR_DIR)
 
+# Request parameters for fake_useragent
+OS = "macos"
+fake_user_agent = UserAgent(os="macos")
 
 # Input dataframe
 DATA_DIR = "../../data/domains/"
-DOMAINS_FILE = "easy_domains.csv"
+DOMAINS_FILE = "selected_reliable_domains.csv"
 DOMAINS_PATH = os.path.join(DATA_DIR, DOMAINS_FILE)
 
 # Output files
@@ -120,7 +128,7 @@ def random_wait(min=1, max=5):
     time.sleep(random_wait)
 
 
-def process_articles(articles, qmeta):
+def process_articles(articles):
     """
     Process a list of articles returned by the SERP API.
 
@@ -132,7 +140,6 @@ def process_articles(articles, qmeta):
     Parameters
     ----------
     - articles (list): A list of Google News articles returned by the SERP API to process.
-    - qmeta (dict): A dictionary containing meta information about the query.
 
     Returns
     -------
@@ -148,12 +155,12 @@ def process_articles(articles, qmeta):
     article_records = []
     with open(article_fp, "a") as f_art:
         try:
-            for idx, article in enumerate(articles, start=1):
+            for idx, article in enumerate(articles[:2], start=1):
                 print(f"\t- Processing article {idx}/{len(articles)}")
                 print(f"\t\t- URL: {article['link']}")
 
                 serp_article = SerpGnewsArticle(article)
-                article_record = get_article_details(serp_article, qmeta)
+                article_record = get_article_details(serp_article)
 
                 json_line = f"{json.dumps(article_record)}\n"
                 f_art.write(json_line)
@@ -167,7 +174,45 @@ def process_articles(articles, qmeta):
     return article_records
 
 
-def get_article_details(serp_article, qmeta):
+def make_request(url):
+    """
+    Make request, with manually collected cookies, if present.
+
+    Parameters
+    ----------
+    - url (str): The URL to fetch.
+
+    Returns
+    -------
+    requests.Response: The response object.
+    """
+    try:
+        # Use requests to fetch the web page
+        extracted = tldextract.extract(url)
+        domain = ".".join([extracted.domain, extracted.suffix])
+        if COOKIES_MAP.get(domain, None):
+            response = requests.get(
+                url,
+                cookies=COOKIES_MAP[domain],
+                headers={
+                    "user-agent": fake_user_agent.random,
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                },
+            )
+        else:
+            response = requests.get(
+                url,
+                headers={
+                    "user-agent": fake_user_agent.random,
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                },
+            )
+    except Exception as e:
+        raise Exception(f"Error fetching URL <{url}>: {e}")
+    return response
+
+
+def get_article_details(serp_article):
     """
     Given a SerpGnewsArticle, download and extract the article details.
 
@@ -175,14 +220,13 @@ def get_article_details(serp_article, qmeta):
     ----------
     - serp_article (SerpGnewsArticle): SerpGnewsArticle class based on SERP API response.
         Keys included: ['position', 'title', 'source', 'link', 'thumbnail', 'date']
-    - qmeta (dict): A dictionary containing meta information about the query.
 
     Returns
     -------
     article_record (dict): The article record.
         - Keys include:
-            ['authors', 'link', 'publisher', 'serp_date', 'title', 'domain',
-            'gnews_pub_token', 'serp_query_time', 'article_text', 'n3k_publish_date']
+            ['authors', 'gnews_position', 'link', 'publisher', 'serp_date',
+            'title', 'text', 'article_text', 'article_html', 'n3k_publish_date']
         - See the SerpGnewsArticle class for more details.
 
     Examples
@@ -191,17 +235,15 @@ def get_article_details(serp_article, qmeta):
     """
     # Download the article using cookies, if present
     url = serp_article.link
+    response = make_request(url)
 
     # Parse the article using newspaper3k
-    n3k_article = Article(url)
-    n3k_article.download()
+    n3k_article = Article(url="")
+    n3k_article.set_html(response.text)
     n3k_article.parse()
 
-    # Build the article record (creates dict)
-    article_record = get_class_property_dict(serp_article)
-    article_record["domain"] = qmeta["domain"]
-    article_record["gnews_pub_token"] = qmeta["gnews_pub_token"]
-    article_record["serp_query_time"] = qmeta["serp_query_time"]
+    # Build the article record
+    article_record = get_class_property_dict(serp_article)  # Creates dict
 
     article_record["article_text"] = None
     if n3k_article.text:
@@ -211,9 +253,9 @@ def get_article_details(serp_article, qmeta):
     if n3k_article.publish_date:
         article_record["n3k_publish_date"] = n3k_article.publish_date.timestamp()
 
-    # article_record["article_html"] = None
-    # if n3k_article.html:
-    #     article_record["article_html"] = n3k_article.html
+    article_record["article_html"] = None
+    if n3k_article.html:
+        article_record["article_html"] = n3k_article.html
 
     return article_record
 
@@ -256,17 +298,10 @@ def main(quality_domains_df, api_key):
                     continue
 
                 else:
-                    qmeta = {
-                        "domain": row.domain,
-                        "gnews_pub_token": row.gnews_pub_token,
-                        "serp_query_time": get_dict_val(
-                            results, ["search_metadata", "created_at"]
-                        ),
-                    }
                     print(f"\t- Num results found: {len(results['news_results'])}")
                     articles = results["news_results"]
                     print(f"\t- Num articles found: {len(articles)}")
-                    process_articles(articles, qmeta)
+                    process_articles(articles)
 
                 print("Done collecting data for this domain.")
                 print("-" * 50)
