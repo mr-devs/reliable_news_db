@@ -37,13 +37,11 @@ import datetime
 import json
 import os
 import random
-import requests
 import time
-import tldextract
 
 import pandas as pd
 
-from fake_useragent import UserAgent
+# from fake_useragent import UserAgent
 from serpapi import GoogleSearch
 
 # from newspaper import Config
@@ -58,9 +56,6 @@ CURR_DIR = os.path.dirname(os.path.abspath(__file__))
 if os.getcwd() != CURR_DIR:
     os.chdir(CURR_DIR)
 
-# Request parameters for fake_useragent
-OS = "macos"
-fake_user_agent = UserAgent(os="macos")
 
 # Input dataframe
 DATA_DIR = "../../data/domains/"
