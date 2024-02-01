@@ -175,13 +175,9 @@ def process_articles(article_records):
         try:
             num_records = len(article_records)
             for idx, article in enumerate(article_records, start=1):
-                # Be nice, wait on all but first call
-                if idx != 1:
-                    random_wait()
-
+                # Be nice, wait if needed
                 if wait_bool:
                     random_wait()
-                    wait_bool = False
 
                 print(f"Processing article {idx}/{num_records}")
 
@@ -189,6 +185,7 @@ def process_articles(article_records):
                 print(f"\t- URL: {link}")
                 if link in downloaded_links_set:
                     print("\t- Already processed, skipping")
+                    wait_bool = False
                     continue
 
                 # Download article text, add it to the record
