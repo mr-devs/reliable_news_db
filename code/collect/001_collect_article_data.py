@@ -169,6 +169,7 @@ def process_articles(article_records):
     files = collect_last_x_files(DOWNLOADED_LINKS_DIR, NUM_DAYS)
     downloaded_links_set = load_downloaded_links(files)
 
+    wait_bool = False
     # Open output files for new records and links cache
     with open(article_fp, "a") as f_art, open(links_fp, "a") as f_links:
         try:
@@ -177,6 +178,10 @@ def process_articles(article_records):
                 # Be nice, wait on all but first call
                 if idx != 1:
                     random_wait()
+
+                if wait_bool:
+                    random_wait()
+                    wait_bool = False
 
                 print(f"Processing article {idx}/{num_records}")
 
@@ -195,6 +200,7 @@ def process_articles(article_records):
 
                 # Save the downloaded link in the cache
                 f_links.write(f"{link}\n")
+                wait_bool = True
 
         except Exception as e:
             print(f"Error processing URL <{article['link']}>: {e}")
