@@ -1,0 +1,51 @@
+newsguard_score,newsguard_orientation,tranco_rank,domain,mbfc_bias,gnews_pub_token
+100.0,,41,yahoo.com,least-biased,
+100.0,,70,msn.com,left-center,
+100.0,,120,nytimes.com,left-center,CAAqBwgKMI7rigMwlq88
+100.0,Slightly Left,173,theguardian.com,left-center,CAAqBggKMJeqezDfswk
+95.0,,177,forbes.com,right-center,CAAqBggKMK6pATCgRQ
+95.0,,197,bbc.com,left-center,
+100.0,,236,washingtonpost.com,left-center,CAAqBwgKMI7UlAowt9F0
+100.0,,252,cdc.gov,pro-science,
+95.0,,268,reuters.com,least-biased,CAAqBggKMLegDDCwJg
+95.0,,298,bloomberg.com,left-center,
+100.0,,308,wsj.com,right-center,CAAqBwgKMNbcyQEw58sV
+100.0,,342,businessinsider.com,left-center,
+100.0,,346,nasa.gov,pro-science,
+100.0,,366,npr.org,left-center,
+100.0,Slightly Left,394,usatoday.com,left-center,
+100.0,,408,time.com,left-center,
+100.0,,444,cnet.com,least-biased,
+100.0,,455,ft.com,least-biased,CAAqBwgKMPuH1gcw-M9I
+95.0,,517,cbsnews.com,left-center,
+100.0,,539,latimes.com,left-center,
+100.0,,541,theverge.com,left-center,
+100.0,,594,nbcnews.com,left-center,
+100.0,Slightly Left,611,theatlantic.com,left-center,
+100.0,,669,hbr.org,least-biased,CAAqIAgKIhpDQklTRFFnTWFna0tCMmhpY2k1dmNtY29BQVAB
+100.0,,671,nationalgeographic.com,pro-science,
+100.0,,682,investopedia.com,least-biased,
+100.0,,686,yahoo.net,n/a,
+100.0,,714,pbs.org,left-center,
+100.0,,836,economist.com,least-biased,CAAqKAgKIiJDQklTRXdnTWFnOEtEV1ZqYjI1dmJXbHpkQzVqYjIwb0FBUAE
+95.0,,845,usnews.com,left-center,
+100.0,,893,theconversation.com,least-biased,CAAqMAgKIipDQklTR1FnTWFoVUtFM1JvWldOdmJuWmxjbk5oZEdsdmJpNWpiMjBvQUFQAQ
+95.0,,896,cbc.ca,left-center,
+100.0,,954,marketwatch.com,right-center,
+100.0,Slightly Left,955,newyorker.com,left,
+100.0,,960,fortune.com,right-center,
+95.0,,971,apnews.com,left-center,
+100.0,,1095,newsweek.com,right-center,CAAqBwgKMO-82wow4qvMAQ
+100.0,Slightly Left,1128,fastcompany.com,left-center,
+100.0,,1173,zdnet.com,least-biased,
+100.0,,1311,pewresearch.org,least-biased,
+100.0,,1377,scientificamerican.com,pro-science,
+100.0,Slightly Right,1501,inc.com,least-biased,
+100.0,,1834,engadget.com,left-center,
+100.0,,1863,politico.com,left-center,
+100.0,,1936,arstechnica.com,least-biased,
+100.0,,1995,sfgate.com,left-center,
+100.0,,2068,pcmag.com,n/a,
+100.0,,2080,variety.com,left-center,
+100.0,,2082,fool.com,left-center,
+100.0,,2093,livescience.com,pro-science,

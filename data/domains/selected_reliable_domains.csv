@@ -1,0 +1,12 @@
+newsguard_score,tranco_rank,domain,mbfc_bias,gnews_pub_token
+100.0,120,nytimes.com,left-center,CAAqBwgKMI7rigMwlq88
+100.0,173,theguardian.com,left-center,CAAqBggKMJeqezDfswk
+95.0,177,forbes.com,right-center,CAAqBggKMK6pATCgRQ
+100.0,236,washingtonpost.com,left-center,CAAqBwgKMI7UlAowt9F0
+95.0,268,reuters.com,least-biased,CAAqBggKMLegDDCwJg
+100.0,308,wsj.com,right-center,CAAqBwgKMNbcyQEw58sV
+100.0,455,ft.com,least-biased,CAAqBwgKMPuH1gcw-M9I
+100.0,669,hbr.org,least-biased,CAAqIAgKIhpDQklTRFFnTWFna0tCMmhpY2k1dmNtY29BQVAB
+100.0,836,economist.com,least-biased,CAAqKAgKIiJDQklTRXdnTWFnOEtEV1ZqYjI1dmJXbHpkQzVqYjIwb0FBUAE
+100.0,893,theconversation.com,least-biased,CAAqMAgKIipDQklTR1FnTWFoVUtFM1JvWldOdmJuWmxjbk5oZEdsdmJpNWpiMjBvQUFQAQ
+100.0,1095,newsweek.com,right-center,CAAqBwgKMO-82wow4qvMAQ
