@@ -162,3 +162,4 @@ cython_debug/
 
 # Manual additions
 data/domains/newsguard_metadata.csv
+logs/
