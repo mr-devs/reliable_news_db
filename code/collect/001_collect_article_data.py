@@ -1,55 +1,39 @@
 """
 Purpose: 
-    Fetch and processes news articles from various domains using SERP API
-    and newspaper3k.
+    Fetch and processes news articles from various domains using SERP API and newspaper3k.
 
 Inputs:
     No script inputs.
-    A dataframe with domains and associated Google News publication tokens is
-    loaded with constants specified below.
+    Google News data from SERP and already downloaded URLs are loaded with constants.
 
 Description:
     The script completes the following steps:
-    1. Loads the dataframe with domains and associated Google News publication tokens
-    2. Fetches news data from Google news for each domain using the SERP API
-        2a. The returned response is stored in a new-line delimited JSON file
-    3. Processes each article to extract detailed information using newspaper3k
-        3a. The article details are stored in a new-line delimited JSON file
-
-
-    The script iterates through domains listed in a DataFrame, fetches news data using the SERP API, 
-    and then processes each article to extract detailed information using newspaper3k. It includes 
-    functions for handling each step of the process and a main function that orchestrates the workflow.
+    1. Loads downloaded Google News data from SERP from the past few days.
+    2. Loads a set of URLs that have already been downloaded.
+        2a. URLs that have already been downloaded are excluded.
+    3. Uses newspaper3k to download articles.
+        3a. The article details are stored in a new-line delimited JSON file.
+        3b. The URL is stored in a file cache for that day.
 
 Usage:
-    python collect_articles.py
+    python 001_collect_article_data.py
 
 Output:
-    The script creates two output new-line delimited JSON files.
-    1. SERP_FILE: Each line contains results from the Serp API. Will contain multiple URLs for
-        a specific domain.
-    2. ARTICLE_FILE: Each line contains a dictionary for a specific URL. Will contain details
-        about the article such as title, author, text, etc.
+    The script creates (or appends to) two new-line delimited files for the day it is run.
+    1. LINKS_FILE (.txt): Each line contains a URL that has been downloaded
+    2. ARTICLE_FILE (.jsonl): Each line contains a dictionary record for a specific URL.
+        Will contain details about the article such as title, author, text, etc.
 
 Author: Matthew DeVerna
 """
+
 import datetime
 import json
 import os
-import random
-import time
-
-import pandas as pd
-
-# from fake_useragent import UserAgent
-from serpapi import GoogleSearch
 
 # from newspaper import Config
 from newspaper import Article
 
-# from reliable_db.cookies import COOKIES_MAP
-from reliable_db.serp_models import SerpGnewsArticle
-from reliable_db.utils import get_class_property_dict, get_dict_val
 from reliable_db.utils import collect_last_x_files, random_wait
 
 # Make sure we are in the proper directory for the relative output dirs/files
