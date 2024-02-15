@@ -1,9 +1,11 @@
 """
 Utility functions for the reliable news database are saved here.
 """
+
 import inspect
 import os
 import random
+import tiktoken
 import time
 
 
@@ -120,3 +122,73 @@ def get_dict_val(dictionary: dict, key_list: list = []):
         else:
             return None
     return retval
+
+
+def get_nested_attr(obj, attr_path, default=None):
+    """
+    Retrieve a nested attribute from an object. Works like get_dict_val but for
+    classes with nested attributes.
+
+    Parameters:
+    ------------
+    - obj: The object from which to get the nested attribute.
+    - attr_path (list): The nested attribute path, as a list e.g., ["attr1", "attr2"].
+    - default: The default value to return if any attribute in the path doesn't exist.
+
+    Returns:
+    -----------
+    - The value of the nested attribute if it exists, otherwise 'default'.
+    """
+    current = obj
+    for attr in attr_path:
+        if hasattr(current, attr):
+            current = getattr(current, attr)
+        else:
+            return default
+    return current
+
+
+def num_tokens_from_string(string, encoding_name="gpt-3.5-turbo"):
+    """
+    Return the number of tokens in a text string.
+
+    Parameters:
+    ------------
+    - string (str): text for which we count tokens.
+    - encoding_name (str): An OpenAI chat completions model (default = gpt-3.5-turbo)
+
+    Returns
+    ------------
+    - num_tokens (int): the number of tokens in `string` based on `model`
+    """
+    encoding = tiktoken.encoding_for_model(encoding_name)
+    num_tokens = len(encoding.encode(string))
+    return num_tokens
+
+
+def trim_text_to_token_limit(text, encoding_name="gpt-3.5-turbo", max_tokens=3500):
+    """
+    Trim the input text to ensure it does not exceed a specified token limit based on the model's encoding.
+
+    Parameters:
+    ------------
+    - text (str): The input text to trim.
+    - encoding_name (str): The encoding model name, default is "gpt-3.5-turbo".
+    - max_tokens (int): the maximum tokens to allow for for a provided string.
+        - Note: The maximum tokens for gpt-3.5 is 4097, however, chat completions insert additional tokens
+            which drives the functional limit down. For simplicity, we use 3500
+        - Ref: https://cookbook.openai.com/examples/how_to_count_tokens_with_tiktoken#6-counting-tokens-for-chat-completions-api-calls
+
+    Returns:
+    ------------
+    - trimmed_text (str): Trimmed text that meets the token limit.
+    """
+
+    # Calculate the number of tokens in the input text
+    encoding = tiktoken.encoding_for_model(encoding_name)
+    tokens = encoding.encode(text)
+
+    # If the number of tokens exceeds the limit return the truncated text
+    if len(tokens) > max_tokens:
+        return encoding.decode(tokens[:max_tokens])
+    return text
