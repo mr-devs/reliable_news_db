@@ -21,25 +21,40 @@ def random_wait(min=1, max=5):
     time.sleep(wait_time)
 
 
-def collect_last_x_files(path, num_files):
+def collect_last_x_files(path, all=True, num_paths=None):
     """
-    Collect the full paths to the most recent `num_files` files in `path`.
+    Collect the full paths to the most recent `num_paths` files in `path`.
     Files in `path` are assumed to be prefixed with a date in the format YYYY_MM_DD.
 
     Parameters
     ----------
-    - path (str): the path to the directory containing the files
-    - num_files (int): the number of files to collect
+    - path (str): the path to the directory containing the files.
+    - all (bool): if True, collect all files in `path`. If False, rely on `num_paths`.
+        Default = True.
+    - num_paths (int): return *up to* this many paths. Must be > 0. If the number
+        of files in `path` < `num_paths` all paths are returned. Cannot be utilized
+        when `all == True`. Default = None.
 
     Returns
     -------
-    list: a list of full paths to the most recent `num_files` files in `path`
+    list: a sorted list of full paths to the most recent `num_paths` files in `path`
     """
+    if not isinstance(path, str):
+        raise TypeError("`path` must be string.")
+    if not isinstance(all, bool):
+        raise TypeError("`all` must be boolean.")
+    if all and num_paths is not None:
+        raise TypeError("`num_paths` cannot be passed when `all == True`")
+    if not all and not isinstance(num_paths, int):
+        raise TypeError("`num_paths` must be an integer")
+    if num_paths is not None and num_paths <= 0:
+        raise ValueError("`num_paths` must be > 0")
+
     # Sorted in ascending order, meaning recent dates are last
-    files = sorted(os.listdir(path))
-    if num_files > len(files):
+    files = sorted(os.listdir(path), reverse=True)
+    if all or num_paths > len(files):
         return [os.path.join(path, file) for file in files]
-    return [os.path.join(path, file) for file in files[-num_files:]]
+    return [os.path.join(path, file) for file in files[:num_paths]]
 
 
 def get_class_property_dict(obj):
