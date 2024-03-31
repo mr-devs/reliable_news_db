@@ -259,6 +259,8 @@ if __name__ == "__main__":
     if args.summaries_split:
         is_sentences = any(i in ["sentence", "sentences"] for i in args.separators)
         args.separators = "sentences" if is_sentences else args.separators
+    else:
+        is_sentences = None
     args.separators = "none" if args.separators is None else args.separators
     args.chunk_size = "none" if args.chunk_size is None else args.chunk_size
     args.chunk_overlap = "none" if args.chunk_overlap is None else args.chunk_overlap
