@@ -75,7 +75,7 @@ SUMMARY_FILE = "article_results_summarized.jsonl"
 LINKS_FILE = "links.txt"
 
 # Number of days to consider for url cache
-NUM_DAYS = 7
+NUM_DAYS = 14
 
 
 # Decorator applies exponentially backoffs to the function, retrying up to six times
@@ -234,7 +234,7 @@ def summarize_articles(article_records):
 
     # Load downloaded links to skip, if any
     print("Loading cached URLs that have already been summarized...")
-    files = collect_last_x_files(DOWNLOADED_LINKS_DIR, NUM_DAYS)
+    files = collect_last_x_files(path=DOWNLOADED_LINKS_DIR, max_paths=NUM_DAYS)
     downloaded_links_set = load_downloaded_links(files)
     print(f"Number of URLs in cache: {len(downloaded_links_set)}")
 
@@ -286,7 +286,9 @@ if __name__ == "__main__":
     print("-" * 50)
 
     # Load data
-    article_record_files = collect_last_x_files(ARTICLE_RECORDS_DIR, NUM_DAYS - 1)
+    article_record_files = collect_last_x_files(
+        path=ARTICLE_RECORDS_DIR, max_paths=NUM_DAYS
+    )
     print("Article files to be processed:", *article_record_files, sep="\n- ")
     print("-" * 50)
 
