@@ -21,7 +21,7 @@ def random_wait(min=1, max=5):
     time.sleep(wait_time)
 
 
-def collect_last_x_files(path, num_paths=None, all=None):
+def collect_last_x_files(path, max_paths=None):
     """
     Collect the full paths to the most recent `num_paths` files in `path`.
     Files in `path` are assumed to be prefixed with a date in the format YYYY_MM_DD.
@@ -29,32 +29,28 @@ def collect_last_x_files(path, num_paths=None, all=None):
     Parameters
     ----------
     - path (str): the path to the directory containing the files.
-    - all (bool): if True, collect all files in `path`. If False, rely on `num_paths`.
-        Default = True.
-    - num_paths (int): return *up to* this many paths. Must be > 0. If the number
-        of files in `path` < `num_paths` all paths are returned. Cannot be utilized
-        when `all == True`. Default = None.
+    - max_paths (int): return *up to* this many paths. Must be > 0. If the number
+        of files in `path` < `max_paths` all paths are returned. Defaults to `None`
+        if this is excluded, and all file paths are returned.
 
     Returns
     -------
-    list: a sorted list of full paths to the most recent `num_paths` files in `path`
+    list: a sorted list of full paths to the most recent `max_paths` files in `path`
     """
+
     if not isinstance(path, str):
-        raise TypeError("`path` must be string.")
-    if not isinstance(all, bool):
-        raise TypeError("`all` must be boolean.")
-    if all and num_paths is not None:
-        raise TypeError("`num_paths` cannot be passed when `all == True`")
-    if not all and not isinstance(num_paths, int):
-        raise TypeError("`num_paths` must be an integer")
-    if num_paths is not None and num_paths <= 0:
-        raise ValueError("`num_paths` must be > 0")
+        raise TypeError("`directory` must be a string.")
+    if max_paths is not None:
+        if not isinstance(max_paths, int):
+            raise TypeError("`max_paths` must be an integer.")
+        if max_paths < 1:
+            raise ValueError("`max_paths` must be greater than 0.")
 
     # Sorted in ascending order, meaning recent dates are last
     files = sorted(os.listdir(path), reverse=True)
-    if all or num_paths > len(files):
-        return [os.path.join(path, file) for file in files]
-    return [os.path.join(path, file) for file in files[:num_paths]]
+    if max_paths is None:
+        max_paths = len(files)
+    return [os.path.join(path, file) for file in files[:max_paths]]
 
 
 def get_class_property_dict(obj):

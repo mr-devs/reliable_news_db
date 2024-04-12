@@ -183,7 +183,7 @@ def main(quality_domains_df, api_key):
     serp_clean_fp = os.path.join(SERP_CLEAN_DIR, f"{today_str}__{SERP_CLEAN_FILE}")
 
     # Ignore links from past days
-    files = collect_last_x_files(path=SERP_CLEAN_DIR, num_paths=NUM_DAYS)
+    files = collect_last_x_files(path=SERP_CLEAN_DIR, max_paths=NUM_DAYS)
     existing_links = build_existing_links_set(files)
 
     print(f"Existing links (from last {NUM_DAYS} days): {len(existing_links)}")
