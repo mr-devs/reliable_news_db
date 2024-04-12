@@ -21,7 +21,7 @@ def random_wait(min=1, max=5):
     time.sleep(wait_time)
 
 
-def collect_last_x_files(path, all=True, num_paths=None):
+def collect_last_x_files(path, num_paths=None, all=None):
     """
     Collect the full paths to the most recent `num_paths` files in `path`.
     Files in `path` are assumed to be prefixed with a date in the format YYYY_MM_DD.
