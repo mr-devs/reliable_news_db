@@ -42,7 +42,6 @@ from openai import OpenAI
 api_key = os.environ["OPENAI_OSOME_API_KEY"]
 openai_client = OpenAI(api_key=api_key)
 
-# from reliable_db.cookies import COOKIES_MAP
 from reliable_db.utils import (
     collect_last_x_files,
     get_nested_attr,
