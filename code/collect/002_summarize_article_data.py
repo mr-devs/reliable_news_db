@@ -66,8 +66,8 @@ PROMPT1 = (
 ARTICLE_RECORDS_DIR = "../../data/article_data/article_results"
 
 # Output files
-SUMMARIES_DIR = "../../data/article_data/article_results_summarized"
-DOWNLOADED_LINKS_DIR = "../../data/article_data/summarized_links"
+SUMMARIES_DIR = "../../../raw_data/article_data/article_results_summarized"
+DOWNLOADED_LINKS_DIR = "../../../raw_data/article_data/summarized_links"
 os.makedirs(SUMMARIES_DIR, exist_ok=True)
 os.makedirs(DOWNLOADED_LINKS_DIR, exist_ok=True)
 SUMMARY_FILE = "article_results_summarized.jsonl"
