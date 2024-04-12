@@ -63,7 +63,7 @@ PROMPT1 = (
 )
 
 # Input dataframe
-ARTICLE_RECORDS_DIR = "../../data/article_data/article_results"
+ARTICLE_RECORDS_DIR = "../../../raw_data/article_data/article_results"
 
 # Output files
 SUMMARIES_DIR = "../../../raw_data/article_data/article_results_summarized"
