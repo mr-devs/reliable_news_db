@@ -43,18 +43,18 @@ if os.getcwd() != CURR_DIR:
 
 
 # Input dataframe
-SERP_CLEAN_DIR = "../../data/article_data/serp_clean"
-DOWNLOADED_LINKS_DIR = "../../data/article_data/downloaded_links"
+SERP_CLEAN_DIR = "../../../raw_data/article_data/serp_clean"
+DOWNLOADED_LINKS_DIR = "../../../raw_data/article_data/downloaded_links"
 os.makedirs(DOWNLOADED_LINKS_DIR, exist_ok=True)
 
 # Output files
-ARTICLE_RECORDS_DIR = "../../data/article_data/article_results"
+ARTICLE_RECORDS_DIR = "../../../raw_data/article_data/article_results"
 os.makedirs(ARTICLE_RECORDS_DIR, exist_ok=True)
 ARTICLE_FILE = "article_results.jsonl"
 LINKS_FILE = "links.txt"
 
 # Number of days to consider for url cache
-NUM_DAYS = 4
+NUM_DAYS = 14
 
 
 def download_article_text(url):
@@ -150,7 +150,7 @@ def process_articles(article_records):
     links_fp = os.path.join(DOWNLOADED_LINKS_DIR, f"{today_str}__{LINKS_FILE}")
 
     # Load downloaded links to skip, if any
-    files = collect_last_x_files(DOWNLOADED_LINKS_DIR, NUM_DAYS)
+    files = collect_last_x_files(path=DOWNLOADED_LINKS_DIR, max_paths=NUM_DAYS)
     downloaded_links_set = load_downloaded_links(files)
 
     wait_bool = False
@@ -192,7 +192,7 @@ def process_articles(article_records):
 
 if __name__ == "__main__":
     # Load data
-    article_record_files = collect_last_x_files(SERP_CLEAN_DIR, NUM_DAYS - 1)
+    article_record_files = collect_last_x_files(path=SERP_CLEAN_DIR, max_paths=NUM_DAYS)
 
     # Extract records that we may need to process
     article_records = []

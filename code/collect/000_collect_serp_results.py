@@ -61,7 +61,7 @@ SERP_RAW_FILE = "serp_raw_results.jsonl"
 SERP_CLEAN_FILE = "serp_clean_records.jsonl"
 
 # Number of days to consider for url cache
-NUM_DAYS = 7
+NUM_DAYS = 14
 
 # Set API key
 SERP_API_KEY = os.environ.get("SERP_API_KEY")
