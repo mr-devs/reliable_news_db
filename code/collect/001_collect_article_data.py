@@ -31,7 +31,6 @@ import datetime
 import json
 import os
 
-# from newspaper import Config
 from newspaper import Article
 
 from reliable_db.utils import collect_last_x_files, random_wait
