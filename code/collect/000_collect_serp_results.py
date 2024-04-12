@@ -30,6 +30,7 @@ Output:
 
 Author: Matthew DeVerna
 """
+
 import datetime
 import json
 import os
@@ -52,15 +53,15 @@ DOMAINS_FILE = "easy_domains.csv"
 DOMAINS_PATH = os.path.join(DATA_DIR, DOMAINS_FILE)
 
 # Output files
-SERP_RAW_DIR = "../../data/article_data/serp_raw"
-SERP_CLEAN_DIR = "../../data/article_data/serp_clean"
+SERP_RAW_DIR = "../../../raw_data/article_data/serp_raw"
+SERP_CLEAN_DIR = "../../../raw_data/article_data/serp_clean"
 os.makedirs(SERP_RAW_DIR, exist_ok=True)
 os.makedirs(SERP_CLEAN_DIR, exist_ok=True)
 SERP_RAW_FILE = "serp_raw_results.jsonl"
 SERP_CLEAN_FILE = "serp_clean_records.jsonl"
 
 # Number of days to consider for url cache
-NUM_DAYS = 3
+NUM_DAYS = 7
 
 # Set API key
 SERP_API_KEY = os.environ.get("SERP_API_KEY")
@@ -95,7 +96,7 @@ def build_existing_links_set(files):
 
 def fetch_serp_data(api_key, gnews_pub_token):
     """
-    Fetches data from the SERP API for a given domain using that domains
+    Fetches data from the SERP API for a given domain using that domain's
     associated "publisher token" for the Google News engine.
 
     Parameters
@@ -151,6 +152,10 @@ def extract_links(news_results):
 def main(quality_domains_df, api_key):
     """
     Main function to orchestrate the fetching and processing of articles from multiple domains.
+    This function will download data from the SERP API and save that raw data to a new-line
+    delimited JSON file where each line represents one SERP response.
+    Afterward, the raw data from that response is processed and saved to a separate new-line delimited
+    file. Each line of this file will represent a record for a single article.
 
     Parameters
     ----------
@@ -163,7 +168,10 @@ def main(quality_domains_df, api_key):
 
     Returns
     -------
-    tuple: A tuple containing the SERP results (dict) and all article records (list).
+    None
+    Saves two files:
+    - SERP_RAW_FILE: Each line contains results from the Serp API.
+    - SERP_CLEAN_FILE: Each line contains a record for a single article.
 
     Examples
     --------
@@ -174,7 +182,7 @@ def main(quality_domains_df, api_key):
     serp_fp = os.path.join(SERP_RAW_DIR, f"{today_str}__{SERP_RAW_FILE}")
     serp_clean_fp = os.path.join(SERP_CLEAN_DIR, f"{today_str}__{SERP_CLEAN_FILE}")
 
-    # Ignore links from the past 3 days
+    # Ignore links from past days
     files = collect_last_x_files(SERP_CLEAN_DIR, NUM_DAYS)
     existing_links = build_existing_links_set(files)
 
