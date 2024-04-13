@@ -240,7 +240,7 @@ def add_records_to_collection(df, collection):
     """
 
     num_items = collection.count()
-    ids = [str(i).zfill(12) for i in range(num_items + 1, len(df) + 1)]
+    ids = [str(i).zfill(12) for i in range(num_items + 1, len(df) + num_items + 1)]
     metadatas = df[METADATA_COLUMNS].to_dict(orient="records")
     documents = df.article_summary.tolist()
     collection.add(
