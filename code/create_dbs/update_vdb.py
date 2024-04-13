@@ -41,9 +41,7 @@ from nltk.tokenize import sent_tokenize
 from reliable_db.utils import collect_last_x_files
 
 CHROMA_DIR = "/home/data/apps/llm_facebook_browser_extension/vector_dbs"
-SUMMARIES_DIR = (
-    "/home/mdeverna/reliable_news_db/data/article_data/article_results_summarized"
-)
+SUMMARIES_DIR = "/home/data/apps/llm_facebook_browser_extension/raw_data/article_data/article_results_summarized"
 METADATA_COLUMNS = [
     "link",
     "domain",
