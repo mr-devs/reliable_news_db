@@ -296,6 +296,10 @@ if __name__ == "__main__":
         item["link"] for item in collection.get(include=["metadatas"])["metadatas"]
     )
 
+    print(f"Excluding {len(links_already_present)} duplicate links...")
+    duplicates_mask = records_df.link.isin(links_already_present)
+    records_df = records_df[~duplicates_mask].reset_index(drop=True)
+
     if len(records_df) > 0:
         if args.summaries_split:
             if args.separators == "sentences":
@@ -311,7 +315,7 @@ if __name__ == "__main__":
                 )
                 records_df = split_summaries_with_splitter(records_df, splitter)
 
-        print("Adding new records...")
+        print(f"Adding new records {len(records_df):,}...")
         add_records_to_collection(records_df, collection)
         print("Done.")
 
