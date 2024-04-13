@@ -40,7 +40,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from nltk.tokenize import sent_tokenize
 from reliable_db.utils import collect_last_x_files
 
-CHROMA_DIR = "/home/mdeverna/chroma"
+CHROMA_DIR = "/home/data/apps/llm_facebook_browser_extension/vector_dbs"
 SUMMARIES_DIR = (
     "/home/mdeverna/reliable_news_db/data/article_data/article_results_summarized"
 )
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     )
 
     print("Loading summaries...")
-    files = collect_last_x_files(SUMMARIES_DIR, all=True)
+    files = collect_last_x_files(SUMMARIES_DIR)  # Includes all summary files
     records_df = load_records_as_df(files)
     records_df.publisher = records_df.publisher
 
@@ -293,7 +293,7 @@ if __name__ == "__main__":
     records_df = records_df.drop_duplicates(subset="link").reset_index(drop=True)
 
     print("Finding any links that are already present in the database...")
-    # Returns an empty list if there are none
+    # Creates an empty set if there are none
     links_already_present = set(
         item["link"] for item in collection.get(include=["metadatas"])["metadatas"]
     )
