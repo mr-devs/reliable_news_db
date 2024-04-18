@@ -240,6 +240,8 @@ def summarize_articles(article_records):
     # Open output files for new records and links cache
     with open(summaries_fp, "a") as f_art, open(links_fp, "a") as f_links:
         try:
+            num_new_articles = 0
+            num_skipped_articles = 0
             num_records = len(article_records)
             print(f"Begin summarizing {num_records} articles...")
             for idx, article in enumerate(article_records, start=1):
@@ -247,10 +249,12 @@ def summarize_articles(article_records):
                 print(f"Processing article {idx}/{num_records}")
 
                 link = article["link"]
-                print(f"\t- URL: {link}")
                 if link in downloaded_links_set:
-                    print("\t- Already summarized, skipping")
+                    # print("\t- Already summarized, skipping")
+                    num_skipped_articles += 1
                     continue
+
+                print(f"\t- URL: {link}")
 
                 # Extract article text, ensure it is not too long for OpenAI
                 article_text = article["text"]
@@ -268,9 +272,14 @@ def summarize_articles(article_records):
                 # Save the downloaded link in the cache
                 f_links.write(f"{link}\n")
 
+                num_new_articles += 1
+
         except Exception as e:
             print(f"Error processing URL <{article['link']}>: {e}")
             print("-" * 50)
+
+    print(f"Number of new articles    : {num_new_articles}")
+    print(f"Number of skipped articles: {num_skipped_articles}")
 
     return
 

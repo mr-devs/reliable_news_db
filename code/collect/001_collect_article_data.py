@@ -156,6 +156,8 @@ def process_articles(article_records):
     # Open output files for new records and links cache
     with open(article_fp, "a") as f_art, open(links_fp, "a") as f_links:
         try:
+            num_new_articles = 0
+            num_skipped_articles = 0
             num_records = len(article_records)
             for idx, article in enumerate(article_records, start=1):
                 # Be nice, wait if needed
@@ -165,11 +167,13 @@ def process_articles(article_records):
                 print(f"Processing article {idx}/{num_records}")
 
                 link = article["link"]
-                print(f"\t- URL: {link}")
                 if link in downloaded_links_set:
-                    print("\t- Already processed, skipping")
+                    # print("\t- Already processed, skipping")
                     wait_bool = False
+                    num_skipped_articles += 1
                     continue
+
+                print(f"\t- URL: {link}")
 
                 # Download article text, add it to the record
                 article["text"] = download_article_text(link)
@@ -182,9 +186,14 @@ def process_articles(article_records):
                 f_links.write(f"{link}\n")
                 wait_bool = True
 
+                num_new_articles += 1
+
         except Exception as e:
             print(f"Error processing URL <{article['link']}>: {e}")
             print("-" * 50)
+
+    print(f"Number of new articles    : {num_new_articles:,}")
+    print(f"Number of skipped articles: {num_skipped_articles:,}\n")
 
     return article_records
 

@@ -24,9 +24,7 @@ Output:
         1. SERP_FILE: Each line contains results from the Serp API. Will contain multiple URLs for
             a specific domain.
         2. LINKS_FILE: Each line contains one URL.
-    All files are:
-        - Saved in the data/article_data/{SERP/LINKS_DIR}
-        - Filenames are prefixed with today's date YYYY_MM_DD
+    All files are prefixed with the date the script is run: YYYY_MM_DD
 
 Author: Matthew DeVerna
 """
