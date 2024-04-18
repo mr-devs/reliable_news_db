@@ -164,8 +164,6 @@ def process_articles(article_records):
                 if wait_bool:
                     random_wait()
 
-                print(f"Processing article {idx}/{num_records}")
-
                 link = article["link"]
                 if link in downloaded_links_set:
                     # print("\t- Already processed, skipping")
@@ -173,6 +171,7 @@ def process_articles(article_records):
                     num_skipped_articles += 1
                     continue
 
+                print(f"Processing article {idx}/{num_records}")
                 print(f"\t- URL: {link}")
 
                 # Download article text, add it to the record

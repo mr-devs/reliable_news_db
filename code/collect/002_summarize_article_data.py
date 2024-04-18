@@ -246,14 +246,13 @@ def summarize_articles(article_records):
             print(f"Begin summarizing {num_records} articles...")
             for idx, article in enumerate(article_records, start=1):
 
-                print(f"Processing article {idx}/{num_records}")
-
                 link = article["link"]
                 if link in downloaded_links_set:
                     # print("\t- Already summarized, skipping")
                     num_skipped_articles += 1
                     continue
 
+                print(f"Processing article {idx}/{num_records}")
                 print(f"\t- URL: {link}")
 
                 # Extract article text, ensure it is not too long for OpenAI
