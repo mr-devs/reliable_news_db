@@ -1,7 +1,8 @@
 # reliable_news_db
 
 This repository includes the meat of a pipeline that generates a reliable news database.
-This database is meant to be employed by an [LLM-powered retrieval augmented generation browser extension](https://chromewebstore.google.com/detail/facebook-browser-extensio/edpggeojlpegninogebnekncniolbahm) to find low-credibility posts on Facebook and generate [bridging](https://bridging.systems/) [conversations](https://www.pnas.org/doi/abs/10.1073/pnas.2311627120).
+An AI browser extension, powered by retrievel-augmented LLMs, that finds low-credibility posts on Facebook and allows users to generate bridging responses rooted in reliable news.
+This database is meant to be employed by an [AI browser extension](https://chromewebstore.google.com/detail/facebook-browser-extensio/edpggeojlpegninogebnekncniolbahm), powered by retrieval-augmented LLMs, that finds low-credibility posts on Facebook and allows users to generate [bridging](https://bridging.systems/) [responses](https://www.pnas.org/doi/abs/10.1073/pnas.2311627120) rooted in reliable news.
 
 > Note:
 > - Some of this code may need tweaking and/or cleaning up. The production version of the linked extension was moved to another repository.
